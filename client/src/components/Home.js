@@ -63,10 +63,11 @@ const Home = ({ user, logout }) => {
 
       if (!body.conversationId) {
         addNewConvo(body.recipientId, data.message);
+      } else {
+        addMessageToConversation(data);
       }
 
       sendMessage(data, body);
-      fetchConversations();
     } catch (error) {
       console.error(error);
     }
@@ -82,6 +83,35 @@ const Home = ({ user, logout }) => {
         }
       });
       setConversations(conversations);
+    },
+    [setConversations, conversations],
+  );
+
+  const addMessageToConversation = useCallback(
+    (data) => {
+      // if sender isn't null, that means the message needs to be put in a brand new convo
+      const { message, sender = null } = data;
+      if (sender !== null) {
+        const newConvo = {
+          id: message.conversationId,
+          otherUser: sender,
+          messages: [message],
+        };
+        newConvo.latestMessageText = message.text;
+        setConversations((prev) => [newConvo, ...prev]);
+      }
+
+      setConversations((prev) => 
+        prev.map((convo) => {
+          if (convo.id === message.conversationId) {
+            convo.messages.push(message);
+            return convo;
+          } else {
+            return convo;
+          }
+        })
+      );
+
     },
     [setConversations, conversations],
   );
@@ -118,14 +148,6 @@ const Home = ({ user, logout }) => {
     );
   }, []);
 
-  const fetchConversations = async () => {
-    try {
-      const { data } = await axios.get("/api/conversations");
-      setConversations(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   // Lifecycle
 
@@ -133,16 +155,16 @@ const Home = ({ user, logout }) => {
     // Socket init
     socket.on("add-online-user", addOnlineUser);
     socket.on("remove-offline-user", removeOfflineUser);
-    socket.on("new-message", fetchConversations);
+    socket.on("new-message", addMessageToConversation);
 
     return () => {
       // before the component is destroyed
       // unbind all event handlers used in this component
       socket.off("add-online-user", addOnlineUser);
       socket.off("remove-offline-user", removeOfflineUser);
-      socket.off("new-message", fetchConversations);
+      socket.off("new-message", addMessageToConversation);
     };
-  }, [addOnlineUser, removeOfflineUser, socket]);
+  }, [addMessageToConversation, addOnlineUser, removeOfflineUser, socket]);
 
   useEffect(() => {
     // when fetching, prevent redirect
@@ -158,7 +180,14 @@ const Home = ({ user, logout }) => {
   }, [user, history, isLoggedIn]);
 
   useEffect(() => {
-    
+    const fetchConversations = async () => {
+      try {
+        const { data } = await axios.get("/api/conversations");
+        setConversations(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
     if (!user.isFetching) {
       fetchConversations();
     }
