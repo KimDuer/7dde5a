@@ -66,7 +66,7 @@ const Home = ({ user, logout }) => {
       } else {
         addMessageToConversation(data);
       }
-
+      
       sendMessage(data, body);
     } catch (error) {
       console.error(error);
@@ -75,14 +75,18 @@ const Home = ({ user, logout }) => {
 
   const addNewConvo = useCallback(
     (recipientId, message) => {
-      conversations.forEach((convo) => {
-        if (convo.otherUser.id === recipientId) {
-          convo.messages.push(message);
-          convo.latestMessageText = message.text;
-          convo.id = message.conversationId;
-        }
-      });
-      setConversations(conversations);
+      setConversations((prev) =>
+        prev.map((convo) => {
+          if (convo.otherUser.id === recipientId) {
+            convo.messages.push(message);
+            convo.latestMessageText = message.text;
+            convo.id = message.conversationId;
+            return convo;
+          } else {
+            return convo;
+          }
+        })
+      );
     },
     [setConversations, conversations],
   );
