@@ -49,6 +49,11 @@ const Home = ({ user, logout }) => {
     setConversations((prev) => prev.filter((convo) => convo.id));
   };
 
+  const saveMessage = async (body) => {
+    const { data } = await axios.post("/api/messages", body);
+    return data;
+  };
+
   const sendMessage = (data, body) => {
     socket.emit("new-message", {
       message: data.message,
@@ -59,7 +64,7 @@ const Home = ({ user, logout }) => {
 
   const postMessage = async (body) => {
     try {
-      const { data } = await axios.post("/api/messages", body);
+      const data = await saveMessage(body)
 
       if (!body.conversationId) {
         addNewConvo(body.recipientId, data.message);
@@ -78,10 +83,11 @@ const Home = ({ user, logout }) => {
       setConversations((prev) =>
         prev.map((convo) => {
           if (convo.otherUser.id === recipientId) {
-            convo.messages.push(message);
-            convo.latestMessageText = message.text;
-            convo.id = message.conversationId;
-            return convo;
+            const convoCopy = { ...convo };
+            convoCopy.messages = [...convoCopy.messages, message]
+            convoCopy.latestMessageText = message.text;
+            convoCopy.id = message.conversationId;
+            return convoCopy;
           } else {
             return convo;
           }
@@ -108,8 +114,9 @@ const Home = ({ user, logout }) => {
       setConversations((prev) => 
         prev.map((convo) => {
           if (convo.id === message.conversationId) {
-            convo.messages.push(message);
-            return convo;
+            const convoCopy = { ...convo };
+            convoCopy.messages = [...convoCopy.messages, message];
+            return convoCopy;
           } else {
             return convo;
           }
@@ -119,7 +126,7 @@ const Home = ({ user, logout }) => {
     },
     [setConversations, conversations],
   );
-
+  
   const setActiveChat = (username) => {
     setActiveConversation(username);
   };
@@ -187,7 +194,11 @@ const Home = ({ user, logout }) => {
     const fetchConversations = async () => {
       try {
         const { data } = await axios.get("/api/conversations");
-        setConversations(data);
+
+        setConversations(data.map((convo) => {
+          convo.messages.sort((a, b) => a.createdAt > b.createdAt ? 1 : -1)
+          return convo
+        }));
       } catch (error) {
         console.error(error);
       }
