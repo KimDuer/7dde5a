@@ -9,11 +9,24 @@ import {
   TextField,
   FormHelperText,
 } from '@material-ui/core';
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  link: {
+    textDecoration: 'none'
+  },
+  button1: {
+    color: theme.palette.primary.main,
+    backgroundColor: 'white',
+    filter: "drop-shadow(1px 2px 2px lightgray)"
+  }
+}))
 
 const Signup = ({ user, register }) => {
   const history = useHistory();
 
   const [formErrorMessage, setFormErrorMessage] = useState({});
+  const classes = useStyles();
 
   const handleRegister = async (event) => {
     event.preventDefault();
@@ -40,8 +53,8 @@ const Signup = ({ user, register }) => {
       <Box>
         <Grid container item>
           <Typography>Need to log in?</Typography>
-          <Link href="/login" to="/login">
-            <Button>Login</Button>
+          <Link href="/login" to="/login" className={classes.link}>
+            <Button className={classes.button1}>Login</Button>
           </Link>
         </Grid>
         <form onSubmit={handleRegister}>
