@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     },
     formContainer: {
       width: "100%",
-      height: "85%",
+      height: "74%",
       minHeight: "500px",
       marginBottom: "60px"
     },
@@ -104,7 +104,7 @@ const Login = ({ user, login }) => {
       </Grid>
       <Grid container item md={7}>
         <Box width="100%">
-          <Grid container item className={classes.linkContainer}>
+          <Grid container item xs={11} md={12} className={classes.linkContainer}>
             <Typography variant="subtitle2" color="secondary">Don't have an account?</Typography>
             <Link href="/register" to="/register" className={classes.link}>
               <Button className={classes.button1}>Create account</Button>
@@ -112,7 +112,7 @@ const Login = ({ user, login }) => {
           </Grid>
           <Grid container className={classes.formContainer}>
             <form onSubmit={handleLogin} className={classes.form}>
-              <Grid item xs={8} md={8}>
+              <Grid item xs={8} md={8} lg={6}>
                 <Typography variant="h4">Welcome back!</Typography>
                 <Grid>
                   <FormControl margin="normal" required className={classes.formElement}>

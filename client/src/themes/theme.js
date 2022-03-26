@@ -19,7 +19,7 @@ export const theme = createMuiTheme({
       letterSpacing: 0,
       fontWeight: "bold",
       width: "150px",
-      height: "50px"
+      height: "60px"
     }
   },
   overrides: {

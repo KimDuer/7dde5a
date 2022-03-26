@@ -113,7 +113,7 @@ const Signup = ({ user, register }) => {
       </Grid>
       <Grid container item md={7}>
         <Box width="100%">
-          <Grid container item className={classes.linkContainer} > 
+          <Grid container item xs={11} md={12} className={classes.linkContainer} > 
             <Typography variant="subtitle2" color="secondary">Already have an account?</Typography>
             <Link href="/login" to="/login" className={classes.link}>
               <Button className={classes.button1}>Login</Button>
@@ -121,7 +121,7 @@ const Signup = ({ user, register }) => {
           </Grid>
           <Grid container className={classes.formContainer} >
             <form onSubmit={handleRegister} className={classes.form}>
-              <Grid item sm={8} md={8}>
+              <Grid item sm={8} md={8} lg={6}>
                 <Typography variant="h4">Create an account.</Typography>
                 <Grid>
                   <FormControl className={classes.formElement}>
