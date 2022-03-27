@@ -19,7 +19,9 @@ export const theme = createMuiTheme({
       letterSpacing: 0,
       fontWeight: "bold",
       width: "150px",
-      height: "60px"
+      height: "60px",
+      color: "white",
+      backgroundColor: "#3A8DFF",
     }
   },
   overrides: {

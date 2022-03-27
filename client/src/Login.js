@@ -67,8 +67,6 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: "30px"
     },
     button2: {
-      color: "white",
-      backgroundColor: theme.palette.primary.main,
       display: "block",
       marginLeft: "auto",
       marginRight: "auto"
