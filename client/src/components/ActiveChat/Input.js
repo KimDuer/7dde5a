@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormControl, FilledInput, IconButton } from '@material-ui/core';
+import { FormControl, FilledInput, IconButton, InputAdornment } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
@@ -13,6 +13,9 @@ const useStyles = makeStyles(() => ({
     borderRadius: 8,
     marginBottom: 20,
   },
+  imgInput: {
+    cursor: 'pointer'
+  }
 }));
 
 const Input = ({ otherUser, conversationId, user, postMessage }) => {
@@ -48,6 +51,15 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
           value={text}
           name="text"
           onChange={handleChange}
+          endAdornment={
+            <InputAdornment position="end">
+              <label htmlFor="raised-button-file">
+                <IconButton component="span" className={classes.imgInput}>
+                    <img src="photo_library_black_24dp.svg" alt="upload"/>
+                </IconButton>
+              </label>
+            </InputAdornment>
+          }
         />
       </FormControl>
       <input
@@ -58,11 +70,6 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
         multiple
         type="file"
       />
-      <label htmlFor="raised-button-file">
-        <IconButton color="primary" component="span">
-            <img src="photo_library_black_24dp.svg" alt="upload"/>
-        </IconButton>
-      </label> 
     </form>
   );
 };
