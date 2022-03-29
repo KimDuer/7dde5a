@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormControl, FilledInput } from '@material-ui/core';
+import { FormControl, FilledInput, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
@@ -50,6 +50,19 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
           onChange={handleChange}
         />
       </FormControl>
+      <input
+        accept="image/*"
+        className={classes.input}
+        style={{ display: 'none' }}
+        id="raised-button-file"
+        multiple
+        type="file"
+      />
+      <label htmlFor="raised-button-file">
+        <IconButton color="primary" component="span">
+            <img src="photo_library_black_24dp.svg" alt="upload"/>
+        </IconButton>
+      </label> 
     </form>
   );
 };
