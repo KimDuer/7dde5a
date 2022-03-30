@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FormControl, FilledInput, IconButton, InputAdornment } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -40,6 +41,24 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
     await postMessage(reqBody);
     setText('');
   };
+  const onImageSelect = async (e) => {
+    const files = e.target.files;
+    const imageURLs = []
+    for (const file of files) {
+      imageURLs.push(URL.createObjectURL(file))
+    }
+    imageURLs.forEach((file) => uploadFile(file))
+  }
+
+  const uploadFile = async (file) => {
+    const url = "https://api.cloudinary.com/v1_1/kimcodesjs/image/upload";
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "hatchways");
+    const { data } = await axios.post(url, formData)
+    .catch(err => console.log(`Error: ${err}`))
+    console.log(data)
+  }
 
   return (
     <form className={classes.root} onSubmit={handleSubmit}>
@@ -69,6 +88,7 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
         id="raised-button-file"
         multiple
         type="file"
+        onChange={onImageSelect}
       />
     </form>
   );
