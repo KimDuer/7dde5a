@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { FormControl, FilledInput, IconButton, InputAdornment } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import axios from 'axios';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -22,6 +21,7 @@ const useStyles = makeStyles(() => ({
 const Input = ({ otherUser, conversationId, user, postMessage }) => {
   const classes = useStyles();
   const [text, setText] = useState('');
+  const [images, setImages] = useState([])
 
   const handleChange = (event) => {
     setText(event.target.value);
@@ -43,21 +43,29 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
   };
   const onImageSelect = async (e) => {
     const files = e.target.files;
-    const imageURLs = []
     for (const file of files) {
-      imageURLs.push(URL.createObjectURL(file))
+      let cloudURL = await uploadFile(file);
+      setImages((prev) => [cloudURL, ...prev])
     }
-    imageURLs.forEach((file) => uploadFile(file))
   }
 
   const uploadFile = async (file) => {
     const url = "https://api.cloudinary.com/v1_1/kimcodesjs/image/upload";
+    
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "hatchways");
-    const { data } = await axios.post(url, formData)
-    .catch(err => console.log(`Error: ${err}`))
-    console.log(data)
+    return fetch(url, {
+      method: "POST",
+      body: formData
+    })
+    .then((response) => { 
+      return response.json().then((data) => {
+          return data.url;
+      }).catch((err) => {
+          console.log(err);
+      }) 
+    });
   }
 
   return (
