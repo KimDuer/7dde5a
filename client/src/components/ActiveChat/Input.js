@@ -12,6 +12,12 @@ const useStyles = makeStyles(() => ({
     backgroundColor: '#F4F6FA',
     borderRadius: 8,
     marginBottom: 20,
+  },
+  imgSelected: {
+    backgroundColor: "#85d19c"
+  },
+  imgInput: {
+    backgroundColor: "transparent"
   }
 }));
 
@@ -81,7 +87,7 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
           endAdornment={
             <InputAdornment position="end">
               <label htmlFor="raised-button-file">
-                <IconButton component="span">
+                <IconButton component="span" className={images.length !== 0 ? classes.imgSelected : classes.imgInput}>
                     <img src="photo_library_black_24dp.svg" alt="upload"/>
                 </IconButton>
               </label>
