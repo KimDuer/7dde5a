@@ -5,12 +5,12 @@ export const theme = createMuiTheme({
     fontFamily: "Open Sans, sans-serif",
     fontSize: 14,
     h4: {
-      fontSize: 28,
+      fontSize: 26,
       fontWeight: "bold",
       marginBottom: "15px"
     },
     h5: {
-      fontSize: 28,
+      fontSize: 26,
       fontWeight: "100",
       lineHeight: 1.5
     },
@@ -22,9 +22,20 @@ export const theme = createMuiTheme({
       height: "60px",
       color: "white",
       backgroundColor: "#3A8DFF",
-    }
+    },
+    
   },
   overrides: {
+    MuiTypography: {
+      colorTextSecondary: {
+        color: "#3A8DFF"
+      },
+      body1: {
+        fontSize: "13px",
+        fontWeight: "bold",
+        paddingRight: "10px"
+      }
+    },
     MuiInput: {
       input: {
         fontWeight: "bold",
@@ -45,7 +56,7 @@ export const theme = createMuiTheme({
           display: "none"
         },
       },
-      
+
       shrink: {
         transform: "translate(0, 1.5px) scale(0.8)"
       }
