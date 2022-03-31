@@ -15,6 +15,9 @@ export const theme = createMuiTheme({
       input: {
         fontWeight: "bold"
       }
+    },
+    MuiIconButton: {
+      cursor: "pointer"
     }
   },
   palette: {

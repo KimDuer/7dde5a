@@ -12,9 +12,6 @@ const useStyles = makeStyles(() => ({
     backgroundColor: '#F4F6FA',
     borderRadius: 8,
     marginBottom: 20,
-  },
-  imgInput: {
-    cursor: 'pointer'
   }
 }));
 
@@ -37,9 +34,11 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
       recipientId: otherUser.id,
       conversationId,
       sender: conversationId ? null : user,
+      attachments: images
     };
     await postMessage(reqBody);
     setText('');
+    setImages([]);
   };
   const onImageSelect = async (e) => {
     const files = e.target.files;
@@ -55,6 +54,7 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "hatchways");
+    
     return fetch(url, {
       method: "POST",
       body: formData
@@ -81,7 +81,7 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
           endAdornment={
             <InputAdornment position="end">
               <label htmlFor="raised-button-file">
-                <IconButton component="span" className={classes.imgInput}>
+                <IconButton component="span">
                     <img src="photo_library_black_24dp.svg" alt="upload"/>
                 </IconButton>
               </label>
