@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FormControl, FilledInput, IconButton, InputAdornment } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -48,10 +49,14 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
   };
   const onImageSelect = async (e) => {
     const files = e.target.files;
+    let promises = []
     for (const file of files) {
-      let cloudURL = await uploadFile(file);
-      setImages((prev) => [cloudURL, ...prev])
+      promises.push(uploadFile(file))
     }
+    Promise.all(promises).then((values) => setImages(values))
+    .catch((error) => {
+      console.log(`Error: ${error}`)
+    })
   }
 
   const uploadFile = async (file) => {
@@ -61,17 +66,22 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
     formData.append("file", file);
     formData.append("upload_preset", "hatchways");
     
-    return fetch(url, {
-      method: "POST",
-      body: formData
-    })
-    .then((response) => { 
-      return response.json().then((data) => {
-          return data.url;
-      }).catch((err) => {
-          console.log(err);
-      }) 
-    });
+    return axios.post(url, {transformRequest: [(formData, headers) => {
+      delete headers.common['x-access-token']
+      return formData
+    }]
+  })
+    // return fetch(url, {
+    //   method: "POST",
+    //   body: formData
+    // })
+    // .then((response) => { 
+    //   return response.json().then((data) => {
+    //       return data.url;
+    //   }).catch((err) => {
+    //       console.log(err);
+    //   }) 
+    // });
   }
 
   return (
