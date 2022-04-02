@@ -53,7 +53,12 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
     for (const file of files) {
       promises.push(uploadFile(file))
     }
-    Promise.all(promises).then((values) => setImages(values))
+    
+    Promise.all(promises).then((values) => {
+      values.forEach((value) => {
+        setImages((prev) => [value.data.url, ...prev])
+      })
+    })
     .catch((error) => {
       console.log(`Error: ${error}`)
     })
@@ -66,22 +71,7 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
     formData.append("file", file);
     formData.append("upload_preset", "hatchways");
     
-    return axios.post(url, {transformRequest: [(formData, headers) => {
-      delete headers.common['x-access-token']
-      return formData
-    }]
-  })
-    // return fetch(url, {
-    //   method: "POST",
-    //   body: formData
-    // })
-    // .then((response) => { 
-    //   return response.json().then((data) => {
-    //       return data.url;
-    //   }).catch((err) => {
-    //       console.log(err);
-    //   }) 
-    // });
+    return axios.post(url, formData)
   }
 
   return (
