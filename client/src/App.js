@@ -7,10 +7,8 @@ import Routes from './routes';
 import axios from 'axios';
 
 axios.interceptors.request.use(async function (config) {
-  if (config.url !== "https://api.cloudinary.com/v1_1/kimcodesjs/image/upload") {
-    const token = await localStorage.getItem('messenger-token');
-    config.headers['x-access-token'] = token;
-  }
+  const token = await localStorage.getItem('messenger-token');
+  config.headers['x-access-token'] = token;
 
   return config;
 });
