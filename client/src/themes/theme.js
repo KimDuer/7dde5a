@@ -10,16 +10,12 @@ export const theme = createMuiTheme({
       fontWeight: "bold"
     }
   },
-  MuiIconButton: {
-    cursor: "pointer"
-  },
   overrides: {
     MuiInput: {
       input: {
         fontWeight: "bold"
       }
     }
-    
   },
   palette: {
     primary: { main: "#3A8DFF" },
